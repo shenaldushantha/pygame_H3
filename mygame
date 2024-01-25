@@ -1,0 +1,83 @@
+import pygame
+import sys
+#import random
+from pygame.locals import*
+pygame.init()
+
+width = 800
+height = 750
+half_heigt=650
+dispSurf = pygame.display.set_mode((width,height))
+pygame.display.set_caption("My game")
+#clock = pygame.time.Clock()
+
+layout = pygame.image.load("layout.png").convert()
+mario = pygame.image.load("mario pic.png").convert()
+bird = pygame.image.load("bird.png").convert()
+
+black = (0,0,0)
+white = (255,255,255)
+red = (255,0,0)
+green = (0,255,0)
+blue = (0,0,255)
+pink = (255,0,130)
+
+dispSurf.blit(layout, (0,0))
+dispSurf.blit(bird, (0,0))
+dispSurf.blit(mario, (250,400))
+
+pygame.display.flip()
+
+
+birdArea = bird.get_rect()
+marioArea = mario.get_rect()
+
+marioArea.left = 400
+marioArea.top = 500
+
+speed = [1,1]
+
+while True:
+
+    for event in pygame.event.get():  # list of all the events in the event queue
+        if event.type == pygame.QUIT: # if the player closed the window
+            pygame.quit() # the display window closes
+            sys.exit()    # the python program exits
+        if event.type == KEYDOWN:     # if the player pressed down any key
+            if event.key == K_ESCAPE: # if the key was esc
+                pygame.quit() # the display window closes
+                sys.exit()    # the python program exits
+
+
+    birdArea.move_ip(speed)
+
+    # fireball bounces from the edges of the display surface
+    if birdArea.left < 0 or birdArea.right > width: # fireball is vertically outside the game
+        speed[0] = -speed[0] # the x-direction of the speed will be converted
+    if birdArea.top < 0 or birdArea.bottom > half_heigt: # fireball is horizontally outside the game
+        speed[1] = -speed[1] # the y-direction of the speed will be converted
+
+
+   
+    #i ird.left <  or bird.right > width: # fireball is vertically outside the game
+        #speed[0] = -speed[0] # the x-direction of the speed will be converted
+    #if bird.top < 0 or bird.bottom > height: # fireball is horizontally outside the game
+        #speed[1] = -speed[1] # the y-direction of the speed will be converted
+
+
+    #
+    pressings = pygame.key.get_pressed()
+    if pressings[K_LEFT]:          # if left-key is true in the list
+        marioArea.move_ip((-1,0))  # mario will be moved one pixel left
+    if pressings[K_RIGHT]:
+        marioArea.move_ip((1,0))
+    if pressings[K_DOWN]:
+        marioArea.move_ip((0,1))
+    if pressings[K_UP]:
+        marioArea.move_ip((0,-1))
+
+    dispSurf.blit(layout, (0,0))
+    dispSurf.blit(bird,birdArea)
+    dispSurf.blit(mario,marioArea)
+
+    pygame.display.flip()
